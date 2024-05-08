@@ -5,7 +5,7 @@ export const Select = ({options, placeholder, changeFn, ...otherProps}) => {
             <option disabled selected>{placeholder}</option>
             {/* <option>Han Solo</option>
             <option>Greedo</option> */}
-            {options.map(item => <option>{item}</option>)}
+            {options.map(item => <option value={item.value}>{item.label}</option>)}
         </select>
     )
 }

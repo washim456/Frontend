@@ -24,10 +24,11 @@ export const SignupPage = () => {
 
 
     const handleInputChange = (e, name) => {
+        console.log(e)
         const { value } = e.target
         setCredentials(cred => ({
             ...cred,
-            [name]: value.toLowerCase()
+            [name]: value
         }))
     }
 
@@ -73,7 +74,7 @@ export const SignupPage = () => {
             <InputText name="name" type="text" placeholder="name" value={credentials.name} changeFn={e => handleInputChange(e, "name")} />
             <InputText name="email" type="email" placeholder="Email" value={credentials.email} changeFn={e => handleInputChange(e, "email")} />
             <InputText name="password" type="password" placeholder="Password" value={credentials.password} changeFn={e => handleInputChange(e, "password")} />
-            <Select name="role" placeholder="Select your role" options={["Admin", "Intern"]} value={credentials.role} changeFn={e => handleInputChange(e, "role")}/>
+            <Select name="role" placeholder="Select your role" options={[{label : "Admin", value: "admin"}, {label: "Intern", value: "intern"}]} value={credentials.role} changeFn={e => handleInputChange(e, "role")}/>
             {credentials.role === "Admin" ? "You'll have to wait for the approval to get admin access" : null}
             
             <div className="">
