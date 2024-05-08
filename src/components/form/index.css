@@ -1,0 +1,4 @@
+input[disabled], input:disabled {
+    @apply !border !border-primary;
+    background-color: red !important;
+}
