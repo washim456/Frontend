@@ -13,8 +13,9 @@ export const LoginPage = () => {
     const navigate = useNavigate()
 
     const initialState = {
-        email : "",
-        password : ""
+        email: "",
+        password: "",
+        role: "admin"
     }
 
     const [credentials, setCredentials] = useState(initialState)
@@ -28,22 +29,21 @@ export const LoginPage = () => {
         }))
     }
 
-    const handleLogin = async () => {
-        try{
-            // const resp = await fetch(`${BASE_URL}/login`,{
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify(credentials)
-            // })
-            
-            // const data = await resp.json()
-            
-            // if(resp.status > 299) {
-            //     throw new Error(data)
-            // }
+    const updateRole = role => {
+        setCredentials(state => {
+            return {
+                ...state,
+                role
+            }
+        })
+        handleLogin()
+    }
 
-            const data = await apiRequest(`${BASE_URL}/login`, credentials, "POST")
-
+    const handleLogin = async (role) => {
+        try {
+            credentials.role = role
+            console.log(credentials)
+           const data = await apiRequest(`${BASE_URL}/login`, credentials, "POST")
 
             const { user, token } = data
 
@@ -54,26 +54,30 @@ export const LoginPage = () => {
             // navigate user to home screen
             navigate("/")
 
-        }catch(e){
-            window.alert(e.message)
+        } catch (e) {
+            window.alert(data.message)
         }
-       
+
     }
 
     console.log("state", credentials)
 
     return (
-        <>
-            <div className="w-full h-[80%] flex flex-col justify-center items-center gap-2" >
-                <p className="text-2xl font-semibold">Login</p>
-                <InputText name="email" type="email" placeholder="Email" value={credentials.email} changeFn={e => handleInputChange(e, "email")}/>
-                <InputText name="password" type="password" placeholder="Password" value={credentials.password} changeFn={e => handleInputChange(e, "password")}/>
-                <Button submitFn={handleLogin}>Login</Button>
-                <div>
-                    New here? <Link to="/signup" className="text-accent">Create your account</Link>
+        <div className="w-full h-[80%] flex flex-col justify-center items-center gap-2">
+            <div>
+                <InputText classNames={"w-full mt-4"} name="email" type="email" placeholder="Email" value={credentials.email} changeFn={e => handleInputChange(e, "email")} />
+                <InputText classNames={"mt-4"} name="password" type="password" placeholder="Password" value={credentials.password} changeFn={e => handleInputChange(e, "password")} />
+                <div className="flex justify-between mt-4">
+                    <Button submitFn={() => handleLogin("intern")} classNames={` w-[49%] rounded-none ${credentials.role === "intern" ? "" : "btn-outline"}`} variant="primary">Login as Intern</Button>
+                    <Button submitFn={() => handleLogin("admin")} classNames={` w-[49%] rounded-none ${credentials.role === "admin" ? "" : "btn-outline"}`} variant="primary">Login as Admin</Button>
                 </div>
+
             </div>
-        </>
+            <div>
+                New here? <Link to="/signup" className="text-accent">Create your account</Link>
+            </div>
+        </div>
+
     )
 
 }

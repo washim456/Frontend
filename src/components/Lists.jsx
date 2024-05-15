@@ -6,7 +6,7 @@ export const Lists = () => {
     return (
         <>
         {organisation ? (
-            <div className="w-[90%] flex flex-col justify-between items-start mx-auto">
+            <div className="flex flex-col justify-between items-start mx-auto">
 
                 <ListItems title="Owners" data={organisation.superadmins} />
                 <ListItems title="Admins" data={organisation.admins} />
