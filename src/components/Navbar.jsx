@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { logout } from "../store/slices/userSlice"
 import avatar from "../assets/avatar.svg"
+import { hasAccess } from "../utils"
 
 export const Navbar = () => {
     const dispatch = useDispatch()
@@ -20,10 +21,18 @@ export const Navbar = () => {
         <div className="navbar bg-primary">
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost text-xl text-white">IMS</Link>
+                <div>
+                    {/* <Link to="/admins" className="btn btn-ghost text-xs text-white hover:cursor-pointer">Admins</Link>
+                    <Link to="/interns" className="btn btn-ghost text-xs text-white hover:cursor-pointer">Interns</Link> */}
+                    {hasAccess("admin", user?.access?.role || "guest") ? (
+                        <Link to="/pending" className="btn btn-ghost text-xs text-white">Pending Requests</Link>
+                    ) : (
+                        <></>
+                    )}
+                </div>
             </div>
             {user ? (
                 <div className="flex-none gap-2">
-                    <Link to="/pending" className="btn btn-ghost text-xs text-white">Pending Requests</Link>
                     <div className="form-control">
                         <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
                     </div>
