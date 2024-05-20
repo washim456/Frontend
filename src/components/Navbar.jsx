@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { logout } from "../store/slices/userSlice"
 import avatar from "../assets/avatar.svg"
 import { hasAccess } from "../utils"
+import { search } from "../store/slices/searchSlice"
 
 export const Navbar = () => {
     const dispatch = useDispatch()
@@ -10,6 +11,7 @@ export const Navbar = () => {
     const navigate = useNavigate()
 
     const user = useSelector(state => state.user.user)
+    const searchText = useSelector(state => state.search.searchText)
 
     const handleLogout = () => {
         localStorage.removeItem("token")
@@ -33,9 +35,11 @@ export const Navbar = () => {
             </div>
             {user ? (
                 <div className="flex-none gap-2">
-                    <div className="form-control">
-                        <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
-                    </div>
+                    {user.role !== "intern" ? (
+                        <div className="form-control">
+                            <input value={searchText} onChange={e => dispatch(search(e.target.value))} type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
+                        </div>
+                    ) : null}
                     <div className="dropdown dropdown-end mr-5">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                             <div className="w-10">
@@ -45,7 +49,7 @@ export const Navbar = () => {
                         </div>
                         <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
                             <li>
-                                <Link to={`/users/${user._id}`} className="justify-between">
+                                <Link to={`/profile`} className="justify-between">
                                     Profile
                                 </Link>
                             </li>

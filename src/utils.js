@@ -22,11 +22,7 @@ export const apiRequest = async (url, data, method = "GET", contentType = "appli
 
     const resp = await fetch(url, reqBody)
 
-    if (resp.status > 299) {
-        throw new Error(resp.statusText)
-    }
-
-    return await resp.json()
+    return await resp?.json()
 }
 
 export const fileRequest = async(url, data, method = "GET", contentType = "multipart/form-data") => {
@@ -40,7 +36,7 @@ export const fileRequest = async(url, data, method = "GET", contentType = "multi
     }
 
     const resp = await fetch(url, reqBody)
-    return await resp.json()
+    return await resp?.json()
 }
 
 export const hasAccess = (requiredAccessLevel, currentLevel) => {
@@ -58,4 +54,9 @@ export const hasAccess = (requiredAccessLevel, currentLevel) => {
     }else{
         return false
     }
+}
+
+export const getDisplayDate = date => {
+    const dateArr = date?.split(" ")
+    return dateArr?.length > 4 ? `${dateArr[1]} ${dateArr[2]}, ${dateArr[3]}` : ""
 }

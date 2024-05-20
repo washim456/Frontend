@@ -6,6 +6,7 @@ import { Lists } from "../components"
 import { useNavigate } from "react-router-dom"
 import { apiRequest, getToken } from "../utils"
 import { InternDashboard } from "./Dashboards/InternDashboard"
+import { AdminDashboard } from "./Dashboards/AdminDashboard"
 
 export const DashboardPage = () => {
     // fetch organisation and display here
@@ -54,7 +55,7 @@ export const DashboardPage = () => {
             {user.role === "intern" ? (
                 <InternDashboard />
             ) : (
-                admin
+                <AdminDashboard />
             )}
         </div>
     )
