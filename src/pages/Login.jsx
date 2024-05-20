@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../store/slices/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils";
+import toast from "react-hot-toast";
 
 export const LoginPage = () => {
 
@@ -29,21 +30,16 @@ export const LoginPage = () => {
         }))
     }
 
-    const updateRole = role => {
-        setCredentials(state => {
-            return {
-                ...state,
-                role
-            }
-        })
-        handleLogin()
-    }
-
     const handleLogin = async (role) => {
         try {
             credentials.role = role
-            console.log(credentials)
-           const data = await apiRequest(`${BASE_URL}/login`, credentials, "POST")
+            const data = await apiRequest(`${BASE_URL}/login`, credentials, "POST")
+
+            console.log("Data", data)
+            if(data.error){
+                toast.error(data.message)
+                return
+            }
 
             const { user, token } = data
 
@@ -52,19 +48,18 @@ export const LoginPage = () => {
             // store user data in redux
             dispatch(login(user))
             // navigate user to home screen
+            toast.success("Logged in successfully")
             navigate("/")
 
         } catch (e) {
-            window.alert(data.message)
+            toast.error("Something went wrong")
         }
 
     }
 
-    console.log("state", credentials)
-
     return (
         <div className="w-full h-[80%] flex flex-col justify-center items-center gap-2">
-            <div>
+            <div className="w-[40%]">
                 <InputText classNames={"w-full mt-4"} name="email" type="email" placeholder="Email" value={credentials.email} changeFn={e => handleInputChange(e, "email")} />
                 <InputText classNames={"mt-4"} name="password" type="password" placeholder="Password" value={credentials.password} changeFn={e => handleInputChange(e, "password")} />
                 <div className="flex justify-between mt-4">
