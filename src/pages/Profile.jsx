@@ -139,7 +139,7 @@ export const Profile = () => {
 
 
     return (
-        <div className="w-[full] h-[80vh] flex mx-auto justify-center items-center gap-4">
+        <div className={`w-[80%] pt-[80px] ml-[18%] h-[80vh] flex mx-auto justify-center items-center gap-4 ${user.role === "intern" ? "close" : ""}`}>
             {loading ? (
                 <div className="flex h-full justify-center items-center">
                     <AiOutlineLoading3Quarters color="oklch(var(--p))" fontSize={"48px"} className="animate-spin" />

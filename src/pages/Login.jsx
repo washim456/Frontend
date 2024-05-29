@@ -21,6 +21,7 @@ export const LoginPage = () => {
 
     const [credentials, setCredentials] = useState(initialState)
 
+    console.log(credentials)
 
     const handleInputChange = (e, name) => {
         const { value } = e.target
@@ -58,7 +59,7 @@ export const LoginPage = () => {
     }
 
     return (
-        <div className="w-full h-[80%] flex flex-col justify-center items-center gap-2">
+        <div className="w-full pt-[80px] h-[80%] flex flex-col justify-center items-center gap-2">
             <div className="w-[40%]">
                 <InputText classNames={"w-full mt-4"} name="email" type="email" placeholder="Email" value={credentials.email} changeFn={e => handleInputChange(e, "email")} />
                 <InputText classNames={"mt-4"} name="password" type="password" placeholder="Password" value={credentials.password} changeFn={e => handleInputChange(e, "password")} />
@@ -67,9 +68,6 @@ export const LoginPage = () => {
                     <Button submitFn={() => handleLogin("admin")} classNames={` w-[49%] rounded-none ${credentials.role === "admin" ? "" : "btn-outline"}`} variant="primary">Login as Admin</Button>
                 </div>
 
-            </div>
-            <div>
-                New here? <Link to="/signup" className="text-accent">Create your account</Link>
             </div>
         </div>
 
