@@ -1,3 +1,5 @@
+import "./index.css"
+
 export { Button, InputText, Select, FileInput } from "./form/index"
 export { Toast } from "./Toast"
 export { Navbar } from "./Navbar"

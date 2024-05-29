@@ -14,10 +14,10 @@ export const AdminDashboard = () => {
 
     const dispatch = useDispatch()
 
+    const user = useSelector(state => state.user.user)
     const unfilteredInterns = useSelector(state => state.interns.interns)
     const searchText = useSelector(state => state.search.searchText)
 
-    console.log("outside", unfilteredInterns)
     // let interns = unfilteredInterns.filter(ui => ui.name.startsWith(searchText) || ui.email.startsWith(searchText))
 
     // const [interns, setInterns] = useState(state => {
@@ -94,7 +94,7 @@ export const AdminDashboard = () => {
 
             setInterns(() => [...filtered])
 
-        } else if( startTime && endTime){
+        } else if (startTime && endTime) {
             console.log("both set")
             const filtered = []
 
@@ -104,7 +104,7 @@ export const AdminDashboard = () => {
                 const startDays = (internStartDate - startTime) / DAYINMS
                 const endDays = (internStartDate - endTime) / DAYINMS
 
-                if(startDays >= 0 && endDays <= 0){
+                if (startDays >= 0 && endDays <= 0) {
                     filtered.push(intern)
                 }
 
@@ -115,77 +115,80 @@ export const AdminDashboard = () => {
     }, [startRange, endRange])
 
     useEffect(() => {
-        if(!searchText){
+        if (!searchText) {
             setInterns(unfilteredInterns)
-        }else{
+        } else {
             setInterns(state => state.filter(ui => ui.name.startsWith(searchText) || ui.email.startsWith(searchText)))
         }
 
     }, [searchText])
 
     return (
-        <div className="w-[90%] mx-auto ">
-            <div className="flex justify-between items-center">
-                <p className="text-lg font-bold mt-4">Interns</p>
-                <div className="flex gap-4 items-center">
-                    {startRange || endRange ? (
-                        <>
-                            <p className="text-sm font-semibold">{getDisplayDate(startRange) || "*"}</p>
-                            <p className="text-sm font-semibold">⸻</p>
-                            <p className="text-sm font-semibold">{getDisplayDate(endRange) || "*"}</p>
-                        </>
-                    ) : null}
-                </div>
-                <div className="flex items-center gap-4">
-                    <p className="text-xs">Filter by dates</p>
-                    <div className="relative">
-                        <Button submitFn={() => setShowStartRange(state => !state)} classNames={"btn-sm btn-outline btn-wide"}>{startRange ? getDisplayDate(startRange) : "Starting Range"}</Button>
-                        {showStartRange ? (
-                            <Calendar className={"absolute z-10"} value={startRange} onChange={e => setStartRange(e.toString(), "start")} />
-
+        <div className={`w-[80%] ml-[18%] pt-[80px] ${user.role === "intern" ? "close" : ""}`}>
+            {/* <div className="mt-[50px]"> */}
+                <div className="flex justify-between items-center">
+                    <p className="text-lg font-bold"> {interns?.length || 0} Interns</p>
+                    <div className="flex gap-4 items-center">
+                        {startRange || endRange ? (
+                            <>
+                                <p className="text-sm font-semibold">{getDisplayDate(startRange) || "*"}</p>
+                                <p className="text-sm font-semibold">⸻</p>
+                                <p className="text-sm font-semibold">{getDisplayDate(endRange) || "*"}</p>
+                            </>
                         ) : null}
                     </div>
-                    <div className="relative">
-                        <Button submitFn={() => setShowEndRange(state => !state)} classNames={"btn-sm btn-outline"}>{endRange ? getDisplayDate(endRange) : "Ending Range"}</Button>
-                        {showEndRange ? (
-                            <Calendar className={"absolute z-10"} value={endRange} onChange={e => setEndRange(e.toString(), "end")} />
+                    <div className="flex items-center gap-4">
+                        <p className="text-xs">Filter by dates</p>
+                        <div className="relative">
+                            <Button submitFn={() => setShowStartRange(state => !state)} classNames={"btn-sm btn-outline btn-wide"}>{startRange ? getDisplayDate(startRange) : "Starting Range"}</Button>
+                            {showStartRange ? (
+                                <Calendar className={"absolute z-10"} value={startRange} onChange={e => setStartRange(e.toString(), "start")} />
 
+                            ) : null}
+                        </div>
+                        <div className="relative">
+                            <Button submitFn={() => setShowEndRange(state => !state)} classNames={"btn-sm btn-outline"}>{endRange ? getDisplayDate(endRange) : "Ending Range"}</Button>
+                            {showEndRange ? (
+                                <Calendar className={"absolute z-10"} value={endRange} onChange={e => setEndRange(e.toString(), "end")} />
+
+                            ) : null}
+                        </div>
+                        {startRange || endRange ? (
+                            <Button submitFn={() => { setStartRange(""); setEndRange(""); setInterns(unfilteredInterns) }} type=" " classNames={"btn-xs btn-outline"}><MdOutlineFilterAltOff /></Button>
                         ) : null}
                     </div>
-                    {startRange || endRange ? (
-                        <Button submitFn={() => { setStartRange(""); setEndRange(""); setInterns(unfilteredInterns)}} type=" " classNames={"btn-xs btn-outline"}><MdOutlineFilterAltOff /></Button>
-                    ) : null}
                 </div>
-            </div>
-            <hr className="mt-10" />
-            <table className="table overflow-auto">
-                {/* head */}
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Department</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        {/* <th>End Date</th> */}
-                    </tr>
-                </thead>
-                <tbody>
-                    {interns.map((intern, index) => (
-                        <tr key={index}>
-                            <th>{index + 1}</th>
-                            <td><Link to={`/interns/${intern._id}`}>{intern.name}</Link></td>
-                            <td>{intern.email}</td>
-                            <td>{intern.dept || "N/A"}</td>
-                            {/* <td>{intern.access.status}</td> */}
-                            <td>{getDisplayDate(intern.startDate) || "N/A"}</td>
-                            <td>{getDisplayDate(intern.endDate) || "N/A"}</td>
-                            {/* <td>{intern.endDate}</td> */}
+                <hr className="mt-10" />
+                <table className="table overflow-auto">
+                    {/* head */}
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            {/* <th>End Date</th> */}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {interns.map((intern, index) => (
+                            <tr key={index}>
+                                <th>{index + 1}</th>
+                                <td><Link to={`/interns/${intern._id}`}>{intern.name}</Link></td>
+                                <td>{intern.email}</td>
+                                <td>{intern.dept || "N/A"}</td>
+                                {/* <td>{intern.access.status}</td> */}
+                                <td>{getDisplayDate(intern.startDate) || "N/A"}</td>
+                                <td>{getDisplayDate(intern.endDate) || "N/A"}</td>
+                                {/* <td>{intern.endDate}</td> */}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+            {/* </div> */}
         </div>
     )
 }

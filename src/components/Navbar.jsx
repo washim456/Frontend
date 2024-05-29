@@ -20,7 +20,7 @@ export const Navbar = () => {
     }
 
     return (
-        <div className="navbar bg-primary">
+        <div className="navbar bg-primary z-20 fixed">
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost text-xl text-white">IMS</Link>
                 <div>
